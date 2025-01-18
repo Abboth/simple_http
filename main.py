@@ -37,8 +37,8 @@ class HttpHandler(BaseHTTPRequestHandler):
         client_socket.sendto(data, (SOCKET_HOST, SOCKET_PORT))
         client_socket.close()
 
-        self.send_response(200)
-        self.send_header("Location", "/contact")
+        self.send_response(303)
+        self.send_header("Location", "/message")
         self.end_headers()
 
     def send_html_file(self, filename, status=200):
