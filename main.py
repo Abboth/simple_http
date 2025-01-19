@@ -38,7 +38,7 @@ class HttpHandler(BaseHTTPRequestHandler):
         client_socket.close()
 
         self.send_response(303)
-        self.send_header("Location", "/message")
+        self.send_header("Location", "/message.http")
         self.end_headers()
 
     def send_html_file(self, filename, status=200):
