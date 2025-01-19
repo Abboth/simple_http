@@ -1,7 +1,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from threading import Thread
 from pathlib import Path
-from storage.saver import saver_to_json
+from saver import saver_to_json
 import urllib.parse
 import mimetypes
 import logging
