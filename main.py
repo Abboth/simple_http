@@ -23,6 +23,8 @@ class HttpHandler(BaseHTTPRequestHandler):
                 self.send_html_file("index.html")
             case "/message.html":
                 self.send_html_file("message.html")
+            case "/message_successfully.html":
+                self.send_html_file("message_successfully.html")
             case _:
                 file = BASE_DIR.joinpath(route.path[1:])
                 if file.exists():
@@ -38,7 +40,7 @@ class HttpHandler(BaseHTTPRequestHandler):
         client_socket.close()
 
         self.send_response(303)
-        self.send_header("Location", "/message.http")
+        self.send_header("Location", "/message_successfully.html")
         self.end_headers()
 
     def send_html_file(self, filename, status=200):
