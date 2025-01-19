@@ -19,9 +19,9 @@ class HttpHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         route = urllib.parse.urlparse(self.path)
         match route.path:
-            case "/":
+            case "/" | "/index.html":
                 self.send_html_file("index.html")
-            case "/message":
+            case "/message.html":
                 self.send_html_file("message.html")
             case _:
                 file = BASE_DIR.joinpath(route.path[1:])
@@ -42,21 +42,24 @@ class HttpHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
     def send_html_file(self, filename, status=200):
+        html_path = Path("templates") / filename
         self.send_response(status)
         self.send_header("Content-Type", "text/html")
         self.end_headers()
-        with open(filename, "r") as f:
+        with open(html_path, "r", encoding="utf-8") as f:
             self.wfile.write(f.read().encode())
 
     def send_static(self):
+        static_path = Path("statics") / Path(self.path).relative_to("/statics")
+        if not static_path.exists() or not static_path.is_file():
+            logging.info(f"Static file not found: {static_path}")
+            self.send_error(404, "Static file not found")
+            return
         self.send_response(200)
-        mt = mimetypes.guess_type(self.path)
-        if mt:
-            self.send_header("Content-Type", mt[0])
-        else:
-            self.send_header("Content-Type", "text/plain")
+        mime_type, _ = mimetypes.guess_type(static_path)
+        self.send_header("Content-Type", mime_type or "application/octet-stream")
         self.end_headers()
-        with open(f".{self.path}", "rb") as file:
+        with open(static_path, "rb") as file:
             self.wfile.write(file.read())
 
 
