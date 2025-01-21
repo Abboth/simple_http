@@ -1,7 +1,9 @@
 import logging
+from functools import wraps
 
 
 def decorator_func(func):
+    @wraps(func)
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
@@ -10,5 +12,5 @@ def decorator_func(func):
         except OSError as e:
             logging.error(f"Error : {e}")
         return func(*args, **kwargs)
-    return wrapper
 
+    return wrapper
